@@ -9,4 +9,4 @@ keras
 pandas-datareader
 yfinance
 scikit-learn
-tensorflow==2.5.0
+tensorflow==2.8.0
