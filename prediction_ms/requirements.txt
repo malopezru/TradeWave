@@ -1,4 +1,4 @@
-Django
+Django==3.2.12
 djangorestframework
 djangorestframework-simplejwt
 djongo
@@ -9,4 +9,4 @@ keras
 pandas-datareader
 yfinance
 scikit-learn
-
+tensorflow==2.5.0

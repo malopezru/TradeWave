@@ -12,5 +12,4 @@ ARG URL=0.0.0.0:7651
 #CMD ["sh", "-c", "python manage.py makemigrations stock_prediction_RPA && python manage.py migrate && python manage.py runserver $URL"] 
 # Script de creación de superusuario
 #RUN python create_superuser.py
-
-
+RUN python manage.py runserver
