@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: users
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ALLOW_EMPTY_PASSWORD: ""
       MYSQL_ROOT_HOST: '%'
     ports:
       - 3307:3306
@@ -38,6 +38,18 @@ services:
       - 27017:27017
     volumes:
       - "mongodata:/data/db"
+    networks:
+      - tradewave_network
+  
+  prediction_app:
+    container_name: prediction_app
+    build:
+      context: ./prediction_ms
+      dockerfile: Dockerfile
+    ports:
+      - 6751:6751
+    depends_on:
+      - mongo_db
     networks:
       - tradewave_network
 
