@@ -1,0 +1,10 @@
+FROM node:16-alpine
+WORKDIR /
+ENV MONGO_HOST=0.0.0.0
+ENV MONGO_PORT=27017
+ENV MONGO_DBNAME=trade_wave
+ENV PORT=5000
+COPY . .
+RUN npm install
+EXPOSE $PORT
+CMD npm start

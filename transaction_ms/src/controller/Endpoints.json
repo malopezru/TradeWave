@@ -1,0 +1,22 @@
+{
+    "name": "stocks",
+    "moduleControllers": {
+      "StockActions": {
+        "path": "./controller/StocksAction.js",
+        "urls": [
+          {
+            "url": "/stocksActions",
+            "get": "getAllStockActions"
+          },
+          {
+            "url": "/stocksActions/user",
+            "get": "getStocksActionsByUser"
+          },
+          {
+            "url": "/stocksActions/stock/:stockId",
+            "post": "buyOrSellStock"
+          }
+        ]
+      }
+    }
+}
