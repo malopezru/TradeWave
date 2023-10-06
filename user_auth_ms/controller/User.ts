@@ -17,7 +17,8 @@ export const getUserById = async ( req: Request, res: Response ) => {
 
 export const postUser = async ( req: Request, res: Response ) => {
     const { body } = req
-    const password = await bcrypt.hash(req.body.password, 10)
+    const salt = await bcrypt.genSalt(10)
+    const password = await bcrypt.hash(req.body.password, salt)
     const user = await User.findOne({
         where: {
             email: body.email

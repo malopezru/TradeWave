@@ -61,6 +61,17 @@ services:
       - 15672:15672
     networks:
       - tradewave_network
+
+  graphql:
+    container_name: graphql
+    restart: always
+    build:
+      context: ./tradewave_ag
+      dockerfile: Dockerfile
+    ports:
+      - 8000:8000
+    networks:
+      - tradewave_network
       
 volumes:
   db_data:

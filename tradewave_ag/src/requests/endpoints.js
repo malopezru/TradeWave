@@ -1,5 +1,5 @@
 module.exports = userEndpoints = {
-    url: 'http:localhost',
+    url: 'user_auth_app',
     port: '4000',
-    entryPoint: '/api/user'
+    entryPoint: 'users'
 } 

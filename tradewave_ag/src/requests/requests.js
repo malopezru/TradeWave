@@ -9,8 +9,8 @@ module.exports = async function generalRequest(url, method, body, headers) {
 	};
 
 	try {
-        const reqResult = await axios(parameters);
-		return reqResult.data;
+        const result = await axios(parameters);
+		return result.data;
 	} catch (err) {
 		return err;
 	}

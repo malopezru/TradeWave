@@ -3,23 +3,21 @@ const { gql } = require("apollo-server");
 const userTypeDefs = gql`
     type User {
         name: String!
-        lastname: String!
         password: String!
-        user: String!
+        email: String!
         id: Int!
     }
 
     type Query {
-        allUsers: [User]!
-        userById(id: Int!): User!
+        allUsers: [User]
+        userById(id: Int!): User
     }
 
-    type Mutations {
+    type Mutation {
         createUser(
             name: String!
-            lastname: String!
             password: String!
-            user: String!
+            email: String!
             ): User!
     }
 `
