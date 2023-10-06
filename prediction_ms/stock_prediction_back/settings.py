@@ -133,8 +133,8 @@ EMAIL_HOST_PASSWORD = 'K22222222'
 EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'correo@correo.com'  
 
-
-
+"all allowed"
+ALLOWED_HOSTS = ["*"]
 
 
 
