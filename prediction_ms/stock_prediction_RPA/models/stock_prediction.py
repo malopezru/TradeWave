@@ -7,6 +7,8 @@ class stock_prediction(models.Model):
     prediction_data = models.TextField()
     class Meta:
         db_table = 'stock_prediction'
+        ordering = ['-created_at']
+    
 
 
 

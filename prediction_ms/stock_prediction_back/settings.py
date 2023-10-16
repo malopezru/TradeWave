@@ -80,7 +80,7 @@ CSRF_COOKIE_SECURE = False  #Se quita seguridad oara entorno de desarrollo, lueg
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-"""DATABASES = {
+DATABASES = {
     'default': {
         'ENGINE': 'djongo',
         'NAME': 'stock_prediction_db',  # Nombre de la base de datos en MongoDB
@@ -90,7 +90,7 @@ CSRF_COOKIE_SECURE = False  #Se quita seguridad oara entorno de desarrollo, lueg
         'PASSWORD': '123456',  # Contraseña de MongoDB
         #ip
     }
-}"""
+}
 
 
 
