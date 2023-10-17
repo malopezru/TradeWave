@@ -7,8 +7,10 @@ require('./src/DBConnection');
 const app = new ExpressServer();
 const server = https.createServer(app.expressServer);
 
-server.listen(conf.port, () => {
-  console.log(`Express.js server is running on port ${conf.port}`);
+const PORT = conf.port || 5000;
+
+server.listen(PORT, () => {
+  console.log(`Express.js server is running on port ${PORT}`);
 });
 
 process.on('unhandledRejection', (reason) => {
