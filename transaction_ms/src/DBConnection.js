@@ -1,7 +1,7 @@
 var conf = require("../conf.js");
 var mongoose = require('mongoose');
 
-var connectionURL = "mongodb://mongo_db:"+conf.mongoDB.port+"/"+conf.mongoDB.name
+var connectionURL = "mongodb://mongo-db:"+conf.mongoDB.port+"/"+conf.mongoDB.name
 //var connectionURL = "mongodb://localhost:27017/tradewave"
 
 console.log(connectionURL)

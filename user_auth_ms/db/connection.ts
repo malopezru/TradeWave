@@ -3,7 +3,7 @@ import { Sequelize } from "sequelize"
 import mysql from 'mysql2'
 
 var con = mysql.createConnection({
-    host: "mysql_db",
+    host: "mysql-db",
     //host: "localhost",
     user: "root",
     database: "users",
@@ -21,7 +21,7 @@ var con = mysql.createConnection({
   });
 
 export const db = new Sequelize('users', 'root', '', {
-    host: 'mysql_db',
+    host: 'mysql-db',
     //host: "localhost",
     dialect: 'mysql',
     logging: true,
