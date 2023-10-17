@@ -7,7 +7,7 @@ services:
     restart: always
     environment:
       MYSQL_DATABASE: users
-      MYSQL_ALLOW_EMPTY_PASSWORD: true
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_HOST: '%'
     ports:
       - 3307:3306
