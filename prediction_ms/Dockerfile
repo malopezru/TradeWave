@@ -8,6 +8,9 @@ RUN pip install --upgrade pip && pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 COPY . /code/
 ARG URL=0.0.0.0:7651
+#RUN python manage.py makemigrations && python manage.pý migrate
+#print ip adrees
+
 
 #CMD ["sh", "-c", "python manage.py makemigrations stock_prediction_RPA && python manage.py migrate && python manage.py runserver $URL"] 
 # Script de creación de superusuario

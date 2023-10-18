@@ -9,6 +9,7 @@ class stock_prediction(models.Model):
         db_table = 'stock_prediction'
         ordering = ['-created_at']
     
+    
 
 
 

@@ -83,16 +83,26 @@ CSRF_COOKIE_SECURE = False  #Se quita seguridad oara entorno de desarrollo, lueg
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'stock_prediction_db',  # Nombre de la base de datos en MongoDB
-        'HOST': 'mongo',  # Nombre del servicio de MongoDB en Docker Compose
-        'PORT': 27017,  # Puerto de MongoDB
-        'USERNAME': 'root',  # Nombre de usuario de MongoDB
-        'PASSWORD': '123456',  # Contraseña de MongoDB
-        #ip
-    }
+        'NAME': 'stock_prediction_db',
+        'CLIENT': {
+            'host': 'mongodb://mongo_db:27017',
+            'username': 'root',
+            'password': '12345',
+            'authSource': 'admin',
+            'authMechanism': 'SCRAM-SHA-1',
+        },
+
+    },
 }
+from django.db import connections
 
+from django.db import connections
 
+try:
+    connections['default'].connect()
+    print('Successfully connected to MongoDB database')
+except Exception as e:
+    print('Failed to connect to MongoDB database:', e)
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
