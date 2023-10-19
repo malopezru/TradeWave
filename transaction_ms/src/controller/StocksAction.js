@@ -2,9 +2,11 @@ const StocksActionModel = require('../models/StocksActionModel');
 const axios = require('axios');
 const Producer = require('./producer');
 const Subscriber = require('./subscriber');
+const { restClient } = require('@polygon.io/client-js');
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 const producer = new Producer();
 const subscriber = new Subscriber();
+const rest = restClient("6Ou2m9VuwRFmvCNEEPRcMXJkYWC_huFR");
 var Stock = function (conf) {
     this.conf = conf;
 }
@@ -50,6 +52,11 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
     } catch (error) {
         res.status(500).jsonp({ error: error.message })
     }
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+Stock.prototype.getAllTickers = async function (req, res) {
+    const data = await rest.stocks.snapshotAllTickers();
+    res.status(200).jsonp(data);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 async function getUser(token) {
