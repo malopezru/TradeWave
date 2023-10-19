@@ -17,8 +17,8 @@
             "post": "buyOrSellStock"
           },
           {
-            "url": "/stocks/getTickers",
-            "get": "getAllTickers"
+            "url": "/stocks/symbols",
+            "get": "getSymbolsData"
           }
         ]
       }

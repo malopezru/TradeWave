@@ -2,11 +2,10 @@ const StocksActionModel = require('../models/StocksActionModel');
 const axios = require('axios');
 const Producer = require('./producer');
 const Subscriber = require('./subscriber');
-const { restClient } = require('@polygon.io/client-js');
+const symbols = require('./symbols');
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 const producer = new Producer();
 const subscriber = new Subscriber();
-const rest = restClient("6Ou2m9VuwRFmvCNEEPRcMXJkYWC_huFR");
 var Stock = function (conf) {
     this.conf = conf;
 }
@@ -54,9 +53,31 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
     }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-Stock.prototype.getAllTickers = async function (req, res) {
-    const data = await rest.stocks.snapshotAllTickers();
-    res.status(200).jsonp(data);
+Stock.prototype.getSymbolsData = async function (req, res) {
+    const symbolsData = [];
+    let id = 0;
+    
+    for (const symbol of symbols) {
+        const endpoint = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
+        const response = await axios({
+            url: endpoint,
+            method: "GET"
+        })
+    
+        const data = response.data.chart.result[0].indicators.quote[0];
+        if (data && response.status === 200) {
+            const symbolValue = data['open'][data['open'].length - 1];
+            symbolsData.push({
+                id: id,
+                name: symbol,
+                value: symbolValue
+            });
+            id++;
+        } else {
+            throw new Error('Error getting symbols');
+        }
+    }
+    res.status(200).jsonp(symbolsData);
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 async function getUser(token) {
