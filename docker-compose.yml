@@ -61,13 +61,14 @@ services:
     ports:
       - 7651:7651
     depends_on:
-      - mongo_db
+      - mongo-db
     networks:
-      - tradewave_network
+      - tradewave-network
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
              python manage.py runserver 0.0.0.0:7651"
+
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     container_name: rabbitmq-containter

@@ -85,16 +85,11 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'stock_prediction_db',
         'CLIENT': {
-            'host': 'mongodb://172.18.0.2:27017',
-            'username': 'root',
-            'password': '12345',
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
+            'host': 'mongodb://mongo-db:27017',
         },
 
     },
 }
-from django.db import connections
 
 from django.db import connections
 
