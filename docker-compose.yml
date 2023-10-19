@@ -1,24 +1,24 @@
 version: '3.3'
 services:
-  user_auth_db:
+  user-auth-db:
     image: mysql:latest
     command: --default-authentication-plugin=mysql_native_password
-    container_name: mysql_db
+    container_name: mysql-db
     restart: always
     environment:
       MYSQL_DATABASE: users
-      MYSQL_ALLOW_EMPTY_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_ROOT_HOST: '%'
     ports:
       - 3307:3306
     volumes:
-      - db_data:/var/lib/mysql
+      - db-data:/var/lib/mysql
       - ./user_auth_ms/init.sql:/data/application/init.sql
     networks:
-      - tradewave_network
+      - tradewave-network
 
-  user_auth_app:
-    container_name: user_auth_app
+  user-auth-app:
+    container_name: user-auth-app
     build: 
       context: ./user_auth_ms
       dockerfile: Dockerfile
@@ -27,44 +27,47 @@ services:
     volumes:
       - .:/app
     depends_on:
-      - user_auth_db
+      - user-auth-db
     networks:
-      - tradewave_network
+      - tradewave-network
       
-  mongo_db:
+  mongo-db:
     image: mongo:latest
-    container_name: mongo_db
+    container_name: mongo-db
     ports:
       - 27017:27017
     volumes:
       - "mongodata:/data/db"
     networks:
-      - tradewave_network
-  
-  prediction_app:
-    container_name: prediction_app
-    build:
-      context: ./prediction_ms
-      dockerfile: Dockerfile
-    ports:
-      - 6751:6751
-    depends_on:
-      - mongo_db
-    networks:
-      - tradewave_network
+      - tradewave-network
 
-  transactions_app:
-    container_name: transactions_app
+  transactions-app:
+    container_name: transactions-app
     build:
       context: ./transaction_ms
       dockerfile: Dockerfile
     ports:
       - 5000:5000
     depends_on:
+      - mongo-db
+    networks:
+      - tradewave-network
+
+  prediction_app:
+    container_name: prediction_app
+    build:
+      context: ./prediction_ms
+      dockerfile: Dockerfile
+    ports:
+      - 7651:7651
+    depends_on:
       - mongo_db
     networks:
       - tradewave_network
-
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:7651"
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     container_name: rabbitmq-containter
@@ -72,7 +75,7 @@ services:
       - 5672:5672
       - 15672:15672
     networks:
-      - tradewave_network
+      - tradewave-network
 
   graphql:
     container_name: graphql
@@ -83,10 +86,10 @@ services:
     ports:
       - 8000:8000
     networks:
-      - tradewave_network
+      - tradewave-network
       
 volumes:
-  db_data:
+  db-data:
   mongodata:
 networks:
-  tradewave_network:
+  tradewave-network:
