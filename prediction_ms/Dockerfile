@@ -8,7 +8,8 @@ RUN pip install --upgrade pip && pip install --upgrade setuptools
 RUN pip install -r requirements.txt
 COPY . /code/
 ARG URL=0.0.0.0:7651
-#RUN python manage.py makemigrations && python manage.pý migrate
+#RUN python manage.py makemigrations
+#RUN python manage.py migrate
 #print ip adrees
 
 
@@ -16,4 +17,3 @@ ARG URL=0.0.0.0:7651
 # Script de creación de superusuario
 #RUN python create_superuser.py
 EXPOSE 7651
-CMD ["python", "manage.py", "runserver", "0.0.0.0:7651"]

@@ -72,15 +72,15 @@ class CrearRegistrosView(APIView):
             symbol = json_data['name']
             dataset = json_data['data']
             #see if symbol ys on database
-            prediction = stock_prediction.objects.get(stock_name=symbol)
-            predictions = prediction.prediction_data
-            created_at=prediction.created_at
-            current_time = timezone.now()
-            time_difference = current_time - created_at
-            
-            # Verifica si han pasado al menos 5 horas
-            if time_difference.total_seconds() <= 5 * 60 * 60: 
-                return JsonResponse({'name': symbol, 'predictions': predictions, 'created_at':created_at}, status=200, safe=False)
+            if stock_prediction.objects.filter(stock_name=symbol).exists():
+                prediction = stock_prediction.objects.get(stock_name=symbol)
+                predictions = prediction.prediction_data
+                created_at=prediction.created_at
+                current_time = timezone.now()
+                time_difference = current_time - created_at
+                # Verifica si han pasado al menos 5 horas
+                if time_difference.total_seconds() <= 5 * 60 * 60: 
+                    return JsonResponse({'name': symbol, 'predictions': predictions, 'created_at':created_at}, status=200, safe=False)
             # Convertir data a numpy ndarray
             dataset = np.array(dataset)
             #split dataset in two and make dataset only the send have
