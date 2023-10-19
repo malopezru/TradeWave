@@ -9,9 +9,11 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
-
+import os
 from pathlib import Path
-
+from dotenv import load_dotenv
+from django.db import connections
+load_dotenv()
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -79,24 +81,21 @@ CSRF_COOKIE_SECURE = False  #Se quita seguridad oara entorno de desarrollo, lueg
 
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
+# import variables from .env
 
 DATABASES = {
     'default': {
         'ENGINE': 'djongo',
-        'NAME': 'stock_prediction_db',
+        'NAME': os.getenv('DB_PREDICTION'),
         'CLIENT': {
-            'host': 'mongodb://mongo_db:27017',
-            'username': 'root',
-            'password': '12345',
-            'authSource': 'admin',
-            'authMechanism': 'SCRAM-SHA-1',
+            'host': os.getenv('DB_HOST'),
+            'username': os.getenv('DB_USERNAME'),
+            'password': os.getenv('DB_PASSWORD'),
+            'authSource': os.getenv('DB_AUTH_SOURCE'),
+            'authMechanism': os.getenv('DB_AUTH_MECHANISM'),
         },
-
     },
 }
-from django.db import connections
-
-from django.db import connections
 
 try:
     connections['default'].connect()
