@@ -36,7 +36,7 @@ function Header(props) {
             <h1 className="page-name">TradeWave</h1>
           </div>
         </div>
-        <nav style={{ textAlign: "center" }}>
+        <nav >
           <div className="button-container">
             <ul>
               {navLinks.map((link) => (
