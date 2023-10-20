@@ -70,7 +70,7 @@ Stock.prototype.getSymbolsData = async function (req, res) {
             symbolsData.push({
                 id: id,
                 name: symbol,
-                value: symbolValue
+                value: symbolValue.toFixed(4)
             });
             id++;
         } else {
