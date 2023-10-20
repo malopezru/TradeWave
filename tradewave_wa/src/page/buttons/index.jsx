@@ -24,11 +24,7 @@ function Header(props) {
     }
     return (
         <header>
-          <img
-            src="https://img.freepik.com/foto-gratis/rastro-pulso-que-brilla-intensamente-monitor-computadora-generado-ai_24640-89894.jpg"
-            alt="Comic Webpage Logo"
-            style={{ maxWidth: "60%", height: "auto" }}
-          />
+          <Header title="Acciones compradas" />
           <h1>{props.title}</h1>
           <nav>
             <ul>
