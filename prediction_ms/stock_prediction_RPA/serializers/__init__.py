@@ -1,0 +1,1 @@
+from .stock_prediction_serializer import stock_prediction_serializer

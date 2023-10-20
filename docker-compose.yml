@@ -53,6 +53,22 @@ services:
     networks:
       - tradewave-network
 
+  prediction-app:
+    container_name: prediction_app
+    build:
+      context: ./prediction_ms
+      dockerfile: Dockerfile
+    ports:
+      - 7651:7651
+    depends_on:
+      - mongo-db
+    networks:
+      - tradewave-network
+    command: >
+      sh -c "python manage.py makemigrations &&
+             python manage.py migrate &&
+             python manage.py runserver 0.0.0.0:7651"
+
   rabbitmq:
     image: rabbitmq:3.9.11-management-alpine
     container_name: rabbitmq-containter
