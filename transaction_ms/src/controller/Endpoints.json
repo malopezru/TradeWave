@@ -15,6 +15,10 @@
           {
             "url": "/stocksActions/stock/:stockId",
             "post": "buyOrSellStock"
+          },
+          {
+            "url": "/stocks/symbols",
+            "get": "getSymbolsData"
           }
         ]
       }

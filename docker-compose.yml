@@ -53,7 +53,7 @@ services:
     networks:
       - tradewave-network
 
-  prediction_app:
+  prediction-app:
     container_name: prediction_app
     build:
       context: ./prediction_ms

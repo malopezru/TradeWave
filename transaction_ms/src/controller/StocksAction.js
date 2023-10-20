@@ -2,6 +2,7 @@ const StocksActionModel = require('../models/StocksActionModel');
 const axios = require('axios');
 const Producer = require('./producer');
 const Subscriber = require('./subscriber');
+const symbols = require('./symbols');
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 const producer = new Producer();
 const subscriber = new Subscriber();
@@ -21,9 +22,9 @@ Stock.prototype.getAllStockActions = async function (req, res) {
 Stock.prototype.getStocksActionsByUser = async function (req, res) {
     const { authorization } = req.headers;
     try {
-        await producer.sendToken(authorization);
-        const user = await subscriber.getUser();
-        const stocks = await StocksActionModel.find({ userId: userData._id });
+        //await producer.sendToken(authorization);
+        const user = await getUser(authorization);
+        const stocks = await StocksActionModel.find({ userId: user.id });
         res.status(200).jsonp(stocks);
     } catch (error) {
         res.status(500).jsonp({ error: error.message })
@@ -32,13 +33,14 @@ Stock.prototype.getStocksActionsByUser = async function (req, res) {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 Stock.prototype.buyOrSellStock = async function (req, res) {
     const { stockId } = req.params;
-    const { action, user, password } = req.query;
+    const { action } = req.query;
+    const { authorization } = req.headers;
     try {
-        const userData = await getUser(user, password);
+        const userData = await getUser(authorization);
         const actions = await StocksActionModel.find({});
         const newAction = new StocksActionModel({
             _id: actions.length + 1,
-            userId: userData._id,
+            userId: userData.id,
             stockId,
             createdAt: new Date(),
             currentValue: 100,
@@ -51,14 +53,40 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
     }
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
-async function getUser(email, password) {
+Stock.prototype.getSymbolsData = async function (req, res) {
+    const symbolsData = [];
+    let id = 0;
+    
+    for (const symbol of symbols) {
+        const endpoint = `https://query1.finance.yahoo.com/v8/finance/chart/${symbol}`;
+        const response = await axios({
+            url: endpoint,
+            method: "GET"
+        })
+    
+        const data = response.data.chart.result[0].indicators.quote[0];
+        if (data && response.status === 200) {
+            const symbolValue = data['open'][data['open'].length - 1];
+            symbolsData.push({
+                id: id,
+                name: symbol,
+                value: symbolValue.toFixed(4)
+            });
+            id++;
+        } else {
+            throw new Error('Error getting symbols');
+        }
+    }
+    res.status(200).jsonp(symbolsData);
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+async function getUser(token) {
     try {
         const user = await axios({
             method: "POST",
-            url: 'http://localhost:4001/api/user/login',
-            data: {
-                user: email,
-                password: password
+            url: 'http://user_auth_app:4000/users/getMe',
+            headers: {
+                authorization: token
             }
         });
         return user.data;

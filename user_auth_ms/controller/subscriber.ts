@@ -8,24 +8,24 @@ export class Subscriber {
         const connection = await amqp.connect(Config.rabbitMQ.url);
         const channel = await connection.createChannel();
 
-        const exchangeName = 'tokenEncryptedExchange';
-        await channel.assertExchange(exchangeName, 'direct');
+        /* const exchangeName = 'tokenEncryptedExchange';
+        await channel.assertExchange(exchangeName, 'direct'); */
 
-        const queue = "TokenExchange"
+        const queue = "user_queue"
         await channel.assertQueue(queue, {
-            durable: true
+            durable: false
         });
+        channel.prefetch(1);
 
         channel.consume(queue, async (msg) => {
             const user = await jwt.verify((msg as ConsumeMessage).content.toString(), 'secret_key')
-            const producer = new Producer()
-            producer.sendUser(user as JwtPayload)
-            setTimeout(function() {
-              connection.close();
-            }, 500);
-        },
-        {
-            noAck: true
-        })
+            await channel.sendToQueue(msg?.properties.replyTo,
+                Buffer.from(user.toString()), {
+                    correlationId: msg?.properties.correlationId
+                })
+
+                channel.ack(msg as ConsumeMessage);
+            }
+        )
     }
 }
