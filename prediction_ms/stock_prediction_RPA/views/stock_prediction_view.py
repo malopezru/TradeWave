@@ -71,16 +71,37 @@ class CrearRegistrosView(APIView):
             # Extrae los datos necesarios del objeto JSON
             symbol = json_data['name']
             dataset = json_data['data']
+           # print(dataset,len(dataset))
+            current_time = timezone.now()
+            
             #see if symbol ys on database
             if stock_prediction.objects.filter(stock_name=symbol).exists():
                 prediction = stock_prediction.objects.get(stock_name=symbol)
                 predictions = prediction.prediction_data
+                predictions= predictions.replace("[","").replace("]","")
+                predictions = predictions.split(",")
+                predictions = list(map(float, predictions))
                 created_at=prediction.created_at
-                current_time = timezone.now()
+                
                 time_difference = current_time - created_at
                 # Verifica si han pasado al menos 5 horas
                 if time_difference.total_seconds() <= 5 * 60 * 60: 
-                    return JsonResponse({'name': symbol, 'predictions': predictions, 'created_at':created_at}, status=200, safe=False)
+                    predicted_price = predictions[1]
+                    #dataset = list(map(float, dataset))
+                    print(predicted_price, dataset[len(dataset)-1][0])
+                    # Verificar si predicted_price es mayor que el último elemento de dataset
+                    if predicted_price > dataset[len(dataset)-1][0]:
+                        message = 'Buy!'
+                    else:
+                        message = 'Don\'t buy!'
+
+                    # Crea un diccionario con los resultados
+                    results = {
+                        'data': symbol,
+                        'predicted price': predicted_price,
+                        'message': message
+                    }
+                    return JsonResponse(results, status=200, safe=False)
             # Convertir data a numpy ndarray
             dataset = np.array(dataset)
             #split dataset in two and make dataset only the send have
@@ -89,19 +110,37 @@ class CrearRegistrosView(APIView):
             # Llama a la función predecir() con los datos proporcionados
             predictor = StockPredictor(dataset)
             predictions = predictor.predict()
+            
+            predictions = np.array(predictions)
+            difference= predictions[0]-dataset[-1]
+            predictions=predictions-difference
+            # Convertir el primer elemento de predictions a un número flotante
+            predicted_price = predictions.tolist()[1][0]
+
+            # Convertir dataset a una lista de números flotantes
+            dataset = list(map(float, dataset))
+
+            # Verificar si predicted_price es mayor que el último elemento de dataset
+            if predicted_price > dataset[-1]:
+                message = 'Buy!'
+            else:
+                message = 'Don\'t buy!'
+
             # Crea un diccionario con los resultados
             results = {
                 'data': symbol,
-                'predictions': predictions.tolist()
+                'predicted price': predicted_price,
+                'message': message
             }
-            # Convierte el diccionario a formato JSON
-            #verificar si existe el registro
+            
+            # Guardar los resultados en la base de datos
             try:
-                stock_prediction.objects.get(stock_name=symbol)
-                stock_prediction.objects.filter(stock_name=symbol).update(prediction_data=predictions.tolist(),created_at=current_time)
+                prediction = stock_prediction.objects.get(stock_name=symbol)
+                prediction.prediction_data = predictions.tolist()
+                prediction.created_at = current_time
+                prediction.save()
             except stock_prediction.DoesNotExist:
-                stock_prediction.objects.create(stock_name=symbol, prediction_data=predictions.tolist())
-
+                stock_prediction.objects.create(stock_name=symbol, prediction_data=predictions.tolist(), created_at=current_time)
             
             return JsonResponse(results, status=200, safe=False)
         except Exception as e:
