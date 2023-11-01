@@ -17,24 +17,45 @@ from ..services.dataDownloader import StockDataDownloader
 
 class CrearRegistrosView(APIView):
     def get(self, request):
-        try:
-            stockDataDownloader = StockDataDownloader()
-            symbols = stockDataDownloader.getStockSymbols()
-            symbols=symbols[:20]
+        # Descargar información de acciones
+        downloader = StockDataDownloader()
+        stock_data, status = downloader.download_stock_info()
 
-            # Crear un conjunto de pares de símbolo con su último precio
-            stock_data = {}
-            for symbol in symbols:
-                data = stockDataDownloader.getStockData(symbol, 1)
-                data=[dat[0] for dat in data]
-                last_price = data[-1]
-                stock_data[symbol] = last_price
+        # Iterar sobre los datos de las acciones descargadas
+        for symbol, value in stock_data.items():
+            # Imprimir información de depuración
+            print(f"Symbol: {symbol}, Value: {value}")
 
-            return JsonResponse(stock_data, status=200, safe=False)
+            # Limpiar el símbolo de la acción
+            symbol = symbol.replace(" ", "")
+            stock_prediction_ = stock_prediction.objects.get(stock_name=symbol)
+            try:
+                # Obtener los datos históricos de la acción
+                historic_data_str = stock_prediction_.historic_data
+                historic_data_str = historic_data_str.replace("[", "").replace("]", "")
+                historic_data_list = historic_data_str.split(",")
+                historic_data = np.array(list(map(float, historic_data_list)))
+                historic_data = historic_data.reshape(-1, 1)
+                if(len(historic_data)<10):
+                    continue
+                # Realizar la predicción de la acción
+                predictor = StockPredictor(historic_data)
+                prediction = predictor.predict()
 
-        except Exception as e:
-                # Manejar excepciones
-            return JsonResponse({'error': str(e)}, status=500)
+                # Ajustar la predicción para que coincida con los datos históricos
+                difference = prediction[0] - historic_data[-1]
+                prediction = prediction - difference
+
+                # Guardar la predicción en la base de datos
+                stock_prediction_.prediction_data = prediction.tolist()
+                stock_prediction_.save()
+
+            except Exception as e:
+                stock_prediction_.delete()
+                continue
+        # Devolver una respuesta JSON
+        return JsonResponse(stock_data, status=status, safe=False)
+        
     
     def post(self, request):
         try:
@@ -83,6 +104,7 @@ class CrearRegistrosView(APIView):
             dataset = dataset[int(len(dataset)/2):]
     
             # Llama a la función predecir() con los datos proporcionados
+            print(dataset)
             predictor = StockPredictor(dataset)
             predictions = predictor.predict()
             

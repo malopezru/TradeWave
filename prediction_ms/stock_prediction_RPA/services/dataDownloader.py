@@ -6,6 +6,8 @@ from datetime import datetime
 from pandas_datareader.data import DataReader
 import yfinance as yf
 from pandas_datareader import data as pdr
+from ..models.stock_prediction import stock_prediction
+from django.utils import timezone
 
 class StockDataDownloader:
     def __init__(self):
@@ -59,4 +61,33 @@ class StockDataDownloader:
             return data.values
         else:
             return None
+    def download_stock_info(self):
+        stockDataDownloader = StockDataDownloader()
+        symbols = stockDataDownloader.getStockSymbols()
+        # solo se realiza con las primeras 50 por temas de tiempo de ejecucion
+        symbols=symbols[:50]
+
+        # Crear un conjunto de pares de símbolo con su último precio
+        stock_data = {}
+        for symbol in symbols:
+            symbol=symbol.replace(" ","")
+            data = stockDataDownloader.getStockData(symbol, 1)
+            if(len(data)<10):
+                #delete from symbols this symbol
+                symbols.remove(symbol)
+                continue
+                
+            data=[dat[0] for dat in data]
+            last_price = data[-1]
+            stock_data[symbol] = last_price
+            try:
+                current_time = timezone.now()
+                prediction = stock_prediction.objects.get(stock_name=symbol)
+                prediction.historic_data = data
+                prediction.created_at = current_time
+                prediction.save()
+            except stock_prediction.DoesNotExist:
+                stock_prediction.objects.create(stock_name=symbol, historic_data=data)
+
+        return stock_data, 200
     

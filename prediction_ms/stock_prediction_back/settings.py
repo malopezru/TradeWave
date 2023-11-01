@@ -39,7 +39,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stock_prediction_RPA',
     'rest_framework',
+    'django_crontab'
 ]
+
 
 
 
@@ -90,6 +92,7 @@ DATABASES = {
 
     },
 }
+
 
 from django.db import connections
 
@@ -152,3 +155,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CRONJOBS = [
+('0 */5 * * *', 'stock_prediction_RPA.cron.downloadStockInfo')
+]
