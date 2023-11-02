@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'stock_prediction_db',
         'CLIENT': {
-            'host': 'mongodb://mongo-db:27017',
+            'host': 'mongodb://mogo-db:27017',
         },
 
     },
@@ -158,5 +158,5 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 CRONJOBS = [
-('0 */5 * * *', 'stock_prediction_RPA.cron.downloadStockInfo')
+('0 */5 * * *', 'stock_prediction_RPA.cron.fillStockInfo')
 ]

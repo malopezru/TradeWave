@@ -38,4 +38,6 @@ def downloadStockInfo():
         except Exception as e:
             stock_prediction_.delete()
 
-    
+def fillStockInfo():
+    import requests
+    response = requests.get('http://localhost:7651/stock_prediction/')
