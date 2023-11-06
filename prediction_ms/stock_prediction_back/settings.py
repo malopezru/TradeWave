@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'djongo',
         'NAME': 'stock_prediction_db',
         'CLIENT': {
-            'host': 'mongodb://mogo-db:27017',
+            'host': 'mongodb://mongo-db:27017',
         },
 
     },
