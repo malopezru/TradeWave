@@ -6,5 +6,6 @@ WORKDIR /code
 COPY requirements.txt /code/
 RUN pip install --upgrade pip && pip install --upgrade setuptools
 RUN pip install -r requirements.txt
+RUN apt-get update && apt-get upgrade -y && apt-get install -y --fix-missing cron
 COPY . /code/
 

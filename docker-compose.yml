@@ -1,36 +1,8 @@
 version: '3.3'
 services:
-  user-auth-db:
-    image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
-    container_name: mysql-db
-    restart: always
-    environment:
-      MYSQL_DATABASE: users
-      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
-      MYSQL_ROOT_HOST: '%'
-    ports:
-      - 3307:3306
-    volumes:
-      - db-data:/var/lib/mysql
-      - ./user_auth_ms/init.sql:/data/application/init.sql
-    networks:
-      - tradewave-network
 
-  user-auth-app:
-    container_name: user-auth-app
-    build: 
-      context: ./user_auth_ms
-      dockerfile: Dockerfile
-    ports:
-      - 4000:4000
-    volumes:
-      - .:/app
-    depends_on:
-      - user-auth-db
-    networks:
-      - tradewave-network
-      
+
+
   mongo-db:
     image: mongo:latest
     container_name: mongo-db
@@ -41,17 +13,7 @@ services:
     networks:
       - tradewave-network
 
-  transactions-app:
-    container_name: transactions-app
-    build:
-      context: ./transaction_ms
-      dockerfile: Dockerfile
-    ports:
-      - 5000:5000
-    depends_on:
-      - mongo-db
-    networks:
-      - tradewave-network
+
 
   prediction-app:
     container_name: prediction_app
@@ -67,28 +29,13 @@ services:
     command: >
       sh -c "python manage.py makemigrations &&
              python manage.py migrate &&
+             python manage.py crontab add &&
+             python stock_prediction_RPA/on_boot.py &
              python manage.py runserver 0.0.0.0:7651"
 
-  rabbitmq:
-    image: rabbitmq:3.9.11-management-alpine
-    container_name: rabbitmq-containter
-    ports:
-      - 5672:5672
-      - 15672:15672
-    networks:
-      - tradewave-network
 
-  graphql:
-    container_name: graphql
-    restart: always
-    build:
-      context: ./tradewave_ag
-      dockerfile: Dockerfile
-    ports:
-      - 8000:8000
-    networks:
-      - tradewave-network
-      
+
+
 volumes:
   db-data:
   mongodata:

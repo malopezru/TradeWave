@@ -18,9 +18,9 @@ from ..cron import downloadStockInfo
 class CrearRegistrosView(APIView):
     def get(self, request):
         # Descargar información de acciones
-        stock_data,status=downloadStockInfo()
+        downloadStockInfo()
         # Devolver una respuesta JSON
-        return JsonResponse(stock_data, status=status, safe=False)
+        return JsonResponse({'message': 'success'}, status=200)
         
     
     def post(self, request):
