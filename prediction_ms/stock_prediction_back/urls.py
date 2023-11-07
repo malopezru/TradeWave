@@ -17,9 +17,14 @@ Including another URLconf
 from django.urls import path
 from django.conf.urls import url, include
 from rest_framework.urlpatterns import format_suffix_patterns
-from stock_prediction_RPA.views.stock_prediction_view import CrearRegistrosView
+from stock_prediction_RPA.views.crear_registros_view import CrearRegistrosView
+from stock_prediction_RPA.views.stock_prediction_view import StockPredictionView
+from stock_prediction_RPA.views.stock_info_view import StockInfoView
 
 
 urlpatterns = [
     path('stock_prediction/', CrearRegistrosView.as_view()),
+    path('stock_prediction_list/', StockPredictionView.as_view()),
+    path('stock_info/', StockInfoView.as_view()),
+
 ]

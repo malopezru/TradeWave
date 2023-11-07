@@ -50,7 +50,6 @@ class CrearRegistrosView(APIView):
                 if time_difference.total_seconds() <= 5 * 60 * 60: 
                     predicted_price = predictions[1]
                     #dataset = list(map(float, dataset))
-                    print(predicted_price, dataset[len(dataset)-1][0])
                     # Verificar si predicted_price es mayor que el último elemento de dataset
                     if predicted_price > dataset[len(dataset)-1][0]:
                         message = 'Buy!'
@@ -60,6 +59,7 @@ class CrearRegistrosView(APIView):
                     # Crea un diccionario con los resultados
                     results = {
                         'data': symbol,
+                        'actual price': dataset[len(dataset)-1][0],
                         'predicted price': predicted_price,
                         'message': message
                     }

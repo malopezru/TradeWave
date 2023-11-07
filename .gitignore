@@ -3,3 +3,5 @@ dist/
 nodes_modules/
 node_modules/
 .env
+myenv/
+myenv

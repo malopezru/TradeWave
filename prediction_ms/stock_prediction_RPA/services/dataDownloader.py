@@ -65,7 +65,7 @@ class StockDataDownloader:
         stockDataDownloader = StockDataDownloader()
         symbols = stockDataDownloader.getStockSymbols()
         # solo se realiza con las primeras 50 por temas de tiempo de ejecucion
-        symbols=symbols[:50]
+        symbols=symbols[:5]
 
         # Crear un conjunto de pares de símbolo con su último precio
         stock_data = {}
