@@ -67,10 +67,14 @@ app.get('/transactions/:reqType', async (req, res) => {
 })
 
 app.post('/transactions/:reqType/:stock', async (req, res) => {
-    const { reqType, stock } = req.params;
+    let { reqType, stock } = req.params;
     const body = req.body;
+    const { action } = req.query;
     const { authorization } = req.headers;
-    const response = await transactionRequests(reqType, stock, 'POST', body, { authorization });
+    if (reqType == "stock") {
+        reqType = `${reqType}/${stock}?action=${action}`
+    }
+    const response = await transactionRequests(reqType, 'POST', body, { authorization });
     res.status(200).jsonp(response);
 })
 //-------------------------------------------------------------------------------
