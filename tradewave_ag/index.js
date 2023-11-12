@@ -35,11 +35,11 @@ async function start() {
         res.status(200).jsonp(response);
     })
 
-    app.post('/users/:reqType', (req, res) => {
+    app.post('/users/:reqType', async (req, res) => {
         const { reqType } = req.params;
         const body = req.body;
-        const headers = req.headers;
-        const response = userRequests(reqType, 'POST', body, headers);
+        const { authorization } = req.headers;
+        const response = await userRequests(reqType, 'POST', body, { authorization });
         res.status(200).jsonp(response);
     })
 
