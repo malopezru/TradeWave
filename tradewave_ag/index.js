@@ -1,9 +1,11 @@
 const { ApolloServer } = require("apollo-server-express");
-const express = require('express');
-const resolvers = require('./src/resolvers');
 const { userTypeDefs } = require('./src/typeDefs');
 const userRequests = require('./src/requests/userRequests');
+const transactionRequests = require('./src/requests/transactionRequests');
 const bodyParser = require('body-parser')
+const express = require('express');
+const cors = require('cors')
+const resolvers = require('./src/resolvers');
 
 const app = express();
 
@@ -22,7 +24,10 @@ async function start() {
         extended: true
       }));
     app.use(bodyParser.json())
-
+    app.use(cors({
+        origin: '*'
+    }))
+//---------------------- USERS ENDPOINTS ---------------------------------
     app.get('/users/:reqType', async (req, res) => {
         let { reqType } = req.params;
         const body = req.body;
@@ -42,7 +47,33 @@ async function start() {
         const response = await userRequests(reqType, 'POST', body, { authorization });
         res.status(200).jsonp(response);
     })
+    
+    app.put('/users/:reqType', async (req, res) => {
+        const { reqType } = req.params;
+        const body = req.body;
+        const { authorization } = req.headers;
+        const response = await userRequests(reqType, 'PUT', body, { authorization });
+        res.status(200).jsonp(response);
+    })
 
+//---------------------- TRANSACTIONS ENDPOINTS ---------------------------------
+app.get('/transactions/:reqType', async (req, res) => {
+    let { reqType } = req.params;
+    const body = req.body;
+    const headers = req.headers;
+
+    const response = await transactionRequests(reqType, 'GET', body, headers);
+    res.status(200).jsonp(response);
+})
+
+app.post('/transactions/:reqType/:stock', async (req, res) => {
+    const { reqType, stock } = req.params;
+    const body = req.body;
+    const { authorization } = req.headers;
+    const response = await transactionRequests(reqType, stock, 'POST', body, { authorization });
+    res.status(200).jsonp(response);
+})
+//-------------------------------------------------------------------------------
     app.listen(PORT, () => {
         console.log(`Server running at port ${PORT}`);
     })
