@@ -8,9 +8,14 @@ const userTypeDefs = gql`
         id: Int!
     }
 
+    type Token {
+        token: String!
+    }
+
     type Query {
         allUsers: [User]
         userById(id: Int!): User
+        getMe(token: String!): User
     }
 
     type Mutation {
@@ -19,6 +24,18 @@ const userTypeDefs = gql`
             password: String!
             email: String!
             ): User!
+        
+        updateUser(
+            id: Int!
+            email: String!
+            name: String!
+            password: String!
+        ): User!
+
+        loginUser(
+            email: String!
+            password: String!
+        ): Token!
     }
 `
 
