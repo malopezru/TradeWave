@@ -4,7 +4,7 @@ var mongoose = require('mongoose'),
 var StocksActionModel = new Schema({
     _id: { type: Number, required: true },
     userId: { type: Number, required: true },
-    stockId: { type: Number, required: true },
+    stock: { type: String, required: true },
     createdAt: { type: Date, required: true },
     currentValue: { type: Number, required: true },
     action: {

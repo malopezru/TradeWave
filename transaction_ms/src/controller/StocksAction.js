@@ -22,15 +22,11 @@ Stock.prototype.getAllStockActions = async function (req, res) {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 Stock.prototype.getStocksActionsByUser = async function (req, res) {
     const { authorization } = req.headers;
-    const ids = [];
     try {
         const user = await getUser(authorization);
         const stocksByUser = await StocksActionModel.find({ userId: user.id });
-        for (const stock of stocksByUser) {
-            ids.push(stock.stockId);
-        }
-        const stocks = await StocksModel.find({ _id: { $in: ids }})
-        res.status(200).jsonp(stocks);
+        console.log(stocksByUser)
+        res.status(200).jsonp(stocksByUser);
     } catch (error) {
         res.status(500).jsonp({ error: error.message })
     }
@@ -54,6 +50,7 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
         const stocks = await newAction.save();
         res.status(200).jsonp(stocks);
     } catch (error) {
+        console.log(error.message);
         res.status(500).jsonp({ error: error.message })
     }
 }
@@ -89,7 +86,7 @@ async function getUser(token) {
     try {
         const user = await axios({
             method: "POST",
-            url: 'http://localhost:4000/users/getMe',
+            url: 'http://user-auth-app:4000/users/getMe',
             headers: {
                 authorization: token
             }
