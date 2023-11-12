@@ -37,7 +37,7 @@ Stock.prototype.getStocksActionsByUser = async function (req, res) {
 }
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 Stock.prototype.buyOrSellStock = async function (req, res) {
-    const { stockId } = req.params;
+    const { stock } = req.params;
     const { action } = req.query;
     const { authorization } = req.headers;
     try {
@@ -46,7 +46,7 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
         const newAction = new StocksActionModel({
             _id: actions.length + 1,
             userId: userData.id,
-            stockId,
+            stock,
             createdAt: new Date(),
             currentValue: 100,
             action

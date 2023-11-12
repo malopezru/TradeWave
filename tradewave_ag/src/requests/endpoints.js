@@ -4,6 +4,13 @@ const usersHost = {
     entryPoint: 'users'
 } 
 
+const transactionsHost = {
+    url: 'transactions-app',
+    port: '5000',
+    entryPoint: 'transactions'
+} 
+
 module.exports = {
-    usersHost
+    usersHost,
+    transactionsHost
 }

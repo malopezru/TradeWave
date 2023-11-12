@@ -5,15 +5,15 @@
         "path": "./controller/StocksAction.js",
         "urls": [
           {
-            "url": "/stocksActions",
+            "url": "/transactions",
             "get": "getAllStockActions"
           },
           {
-            "url": "/stocksActions/user",
+            "url": "/transactions/user",
             "get": "getStocksActionsByUser"
           },
           {
-            "url": "/stocksActions/stock/:stockId",
+            "url": "/transactions/stock/:stock",
             "post": "buyOrSellStock"
           },
           {

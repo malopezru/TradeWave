@@ -1,4 +1,4 @@
-const generalRequest = require("./requests/requests");
+const { generalRequest } = require("./requests/requests");
 const { usersHost } = require("./requests/endpoints");
 
 const userUrl = `http://${usersHost.url}:${usersHost.port}/${usersHost.entryPoint}`;
