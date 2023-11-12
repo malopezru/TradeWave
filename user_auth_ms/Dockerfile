@@ -1,9 +1,7 @@
 FROM node:18
 
-WORKDIR /APP
-COPY package.json .
+WORKDIR /app
+COPY . .
 RUN npm i
 
-COPY . .
-
-CMD node dist/app.js
+CMD ["npm", "start"]

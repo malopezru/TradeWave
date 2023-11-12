@@ -16,6 +16,7 @@ export const getUserById = async ( req: Request, res: Response ) => {
 }
 
 export const postUser = async ( req: Request, res: Response ) => {
+    console.log("helou")
     const { body } = req
     const salt = await bcrypt.genSalt(10)
     const password = await bcrypt.hash(req.body.password, salt)

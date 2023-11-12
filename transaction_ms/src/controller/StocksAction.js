@@ -1,4 +1,5 @@
 const StocksActionModel = require('../models/StocksActionModel');
+const StocksModel = require('../models/StocksModel');
 const axios = require('axios');
 const Producer = require('./producer');
 const Subscriber = require('./subscriber');
@@ -21,10 +22,14 @@ Stock.prototype.getAllStockActions = async function (req, res) {
 //-------------------------------------------------------------------------------------------------------------------------------------------------------------
 Stock.prototype.getStocksActionsByUser = async function (req, res) {
     const { authorization } = req.headers;
+    const ids = [];
     try {
-        //await producer.sendToken(authorization);
         const user = await getUser(authorization);
-        const stocks = await StocksActionModel.find({ userId: user.id });
+        const stocksByUser = await StocksActionModel.find({ userId: user.id });
+        for (const stock of stocksByUser) {
+            ids.push(stock.stockId);
+        }
+        const stocks = await StocksModel.find({ _id: { $in: ids }})
         res.status(200).jsonp(stocks);
     } catch (error) {
         res.status(500).jsonp({ error: error.message })
@@ -68,7 +73,7 @@ Stock.prototype.getSymbolsData = async function (req, res) {
         if (data && response.status === 200) {
             const symbolValue = data['open'][data['open'].length - 1];
             symbolsData.push({
-                id: id,
+                _id: id,
                 name: symbol,
                 value: symbolValue.toFixed(4)
             });
@@ -84,7 +89,7 @@ async function getUser(token) {
     try {
         const user = await axios({
             method: "POST",
-            url: 'http://user_auth_app:4000/users/getMe',
+            url: 'http://localhost:4000/users/getMe',
             headers: {
                 authorization: token
             }
