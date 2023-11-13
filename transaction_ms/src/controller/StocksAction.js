@@ -39,12 +39,13 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
     try {
         const userData = await getUser(authorization);
         const actions = await StocksActionModel.find({});
+        const stockValue = await getStockValue(stock);
         const newAction = new StocksActionModel({
             _id: actions.length + 1,
             userId: userData.id,
             stock,
             createdAt: new Date(),
-            currentValue: 100,
+            currentValue: stockValue.actual_price,
             action
         });
         const stocks = await newAction.save();
@@ -92,6 +93,18 @@ async function getUser(token) {
             }
         });
         return user.data;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+async function getStockValue(stock) {
+    try {
+        const stockValue = await axios({
+            method: "GET",
+            url: `http://prediction-app:7651/stock_price/?symbol=${stock}`
+        });
+        return stockValue.data;
     } catch (error) {
         throw new Error(error);
     }
