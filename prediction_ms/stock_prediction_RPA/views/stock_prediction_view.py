@@ -15,14 +15,14 @@ class StockPredictionView(APIView):
 
             predicted_price = json.loads(stock.prediction_data)
             # Si predicted_price es un solo número en formato string
-            predicted_price = predicted_price[1][0]
-            last_price = historic_data[-1]
-            message = 'Buy!' if predicted_price > last_price else 'Don\'t buy!'
+            predicted_price = predicted_price[2][0]
+            actual_price = historic_data[0]
+            message = 'Buy!' if predicted_price > actual_price else 'Don\'t buy!'
 
             results.append({
                 'data': stock.stock_name,
-                'actual price': last_price,
-                'predicted price': predicted_price,
+                'actual_price': actual_price,
+                'predicted_price': predicted_price,
                 'message': message
             })
 

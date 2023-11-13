@@ -78,7 +78,7 @@ class StockDataDownloader:
                 continue
                 
             data=[dat[0] for dat in data]
-            last_price = data[-1]
+            last_price = data[0]
             stock_data[symbol] = last_price
             try:
                 current_time = timezone.now()

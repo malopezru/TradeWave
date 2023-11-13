@@ -28,7 +28,7 @@ def downloadStockInfo():
             prediction = predictor.predict()
 
             # Ajustar la predicción para que coincida con los datos históricos
-            difference = prediction[0] - historic_data[-1]
+            difference = prediction[1] - historic_data[0]
             prediction = prediction - difference
 
             # Guardar la predicción en la base de datos
