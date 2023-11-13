@@ -60,32 +60,31 @@ async function start() {
         const { reqType } = req.params;
         const body = req.body;
         const { authorization } = req.headers;
-        console.log("hola")
         const response = await userRequests(reqType, 'DELETE', body, { authorization });
         res.status(200).jsonp(response);
     })
 
 //---------------------- TRANSACTIONS ENDPOINTS ---------------------------------
-app.get('/transactions/:reqType', async (req, res) => {
-    let { reqType } = req.params;
-    const body = req.body;
-    const headers = req.headers;
+    app.get('/transactions/:reqType', async (req, res) => {
+        let { reqType } = req.params;
+        const body = req.body;
+        const headers = req.headers;
 
-    const response = await transactionRequests(reqType, 'GET', body, headers);
-    res.status(200).jsonp(response);
-})
+        const response = await transactionRequests(reqType, 'GET', body, headers);
+        res.status(200).jsonp(response);
+    })
 
-app.post('/transactions/:reqType/:stock', async (req, res) => {
-    let { reqType, stock } = req.params;
-    const body = req.body;
-    const { action } = req.query;
-    const { authorization } = req.headers;
-    if (reqType == "stock") {
-        reqType = `${reqType}/${stock}?action=${action}`
-    }
-    const response = await transactionRequests(reqType, 'POST', body, { authorization });
-    res.status(200).jsonp(response);
-})
+    app.post('/transactions/:reqType/:stock', async (req, res) => {
+        let { reqType, stock } = req.params;
+        const body = req.body;
+        const { action } = req.query;
+        const { authorization } = req.headers;
+        if (reqType == "stock") {
+            reqType = `${reqType}/${stock}?action=${action}`
+        }
+        const response = await transactionRequests(reqType, 'POST', body, { authorization });
+        res.status(200).jsonp(response);
+    })
 //-------------------------------------------------------------------------------
     app.listen(PORT, () => {
         console.log(`Server running at port ${PORT}`);
