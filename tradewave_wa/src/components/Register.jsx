@@ -23,11 +23,11 @@ function Register() {
     }
     try {
       const response = await axios.post(
-        `${"/api/user/register"}`,
+        `${"http://localhost:80/users/register"}`,
         {
-          nombre,
-          correo_electronico: email,
-          contrasena,
+          name: nombre,
+          password: contrasena,
+          email: email,
         }
       );
 

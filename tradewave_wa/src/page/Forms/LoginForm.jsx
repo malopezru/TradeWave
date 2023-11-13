@@ -17,16 +17,16 @@ function Login() {
     
     try {
       const response = await axios.post(
-        `${"/api/user/login"}`,
+        `${"http://localhost:80/users/login"}`,
         {
-          credenciales: email,
-          contrasena: password
+          email: email,
+          password: password
         }
       );
 
-      if (response.status === 200) {
+      if (response.request.status === 200) {
         // guardar el token en el local storage
-        localStorage.setItem('token', response.data.data[0].token);
+        localStorage.setItem('token', response.data.token);
         //get token from local storage
         // redireccionar a la ruta /appMain
         navigate('/AppMain');

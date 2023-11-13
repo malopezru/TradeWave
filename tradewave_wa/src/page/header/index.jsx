@@ -9,10 +9,9 @@ import { Link } from 'react-router-dom';
 function Header(props) {
     const token = localStorage.getItem('token');
     let navLinks = [];
-    let bool=(token==null);
+    let bool=(token!=null);
     if(bool){
         navLinks = [
-            { to: '/', text: 'Inicio' },
             { to: '/AppMain', text: 'Lista de acciones' },
             { to: '/Actions', text: 'Acciones compradas' },
             { to: '/perfil', text: 'Perfil' }
@@ -20,7 +19,7 @@ function Header(props) {
     }
     else{
         navLinks = [
-            { to: '/', text: 'Inicio' },
+            { to: '/login', text: 'Inicio' },
             { to: '/Actions', text: 'Lista de acciones' }
         ];
     }
