@@ -16,7 +16,6 @@ export const getUserById = async ( req: Request, res: Response ) => {
 }
 
 export const postUser = async ( req: Request, res: Response ) => {
-    console.log("helou")
     const { body } = req
     const salt = await bcrypt.genSalt(10)
     const password = await bcrypt.hash(req.body.password, salt)
@@ -80,10 +79,16 @@ export const putUser = async ( req: Request, res: Response ) => {
 
 export const deleteUser = async ( req: Request, res: Response ) => {
     const { id } = req.params
-    const user = await User.findByPk(id)
+    const { authorization } = req.headers;
+    const user = await jwt.verify(authorization as string, 'secret_key')
     if (!user) return res.status(400).jsonp('User id does not exist')
+    if ((user as JwtPayload).id != id) {
+        res.status(400).jsonp(`User and token don't coincide`)
+    }
 
-    await user.destroy()
+    const userToDelete = await User.findByPk(id)
+    if (!userToDelete) return res.status(400).jsonp('User id does not exist')
+    await userToDelete.destroy()
 
-    res.json(user)
+    res.json(userToDelete)
 }
