@@ -42,7 +42,7 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
             await StocksActionModel.deleteOne({ stock, userId: userData.id, action: 'buy' })
         };
         const actions = await StocksActionModel.find({});
-        //const stockValue = await getStockValue(stock);
+        const stockValue = await getStockValue(stock);
         console.log(actions)
         let id = 0;
         if (actions.length != 0) {
@@ -53,7 +53,7 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
             userId: userData.id,
             stock,
             createdAt: new Date(),
-            currentValue: 100,
+            currentValue: stockValue.stock_price,
             action
         });
         const stocks = await newAction.save();
