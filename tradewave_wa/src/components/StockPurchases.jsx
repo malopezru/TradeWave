@@ -51,7 +51,7 @@ function StockPurchases() {
     const fetchStocks = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7651/stock_prediction_list/"
+          "http://localhost:80/predictions/stock_prediction_list/"
         );
         const data = response.data;
         
@@ -67,7 +67,7 @@ function StockPurchases() {
         let purchased=purchased_.data;
         //filtrar los stocks que no son del usuario
 
-        let stocks = purchased.map(item => item.stock);
+        let stocks = purchased.filter(item => item.action === "buy").map(item => item.stock);
         let filteredData = data.filter(item => stocks.includes(item.data));
         setStocks(filteredData);
             

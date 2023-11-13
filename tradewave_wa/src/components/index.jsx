@@ -51,7 +51,7 @@ function AppMain() {
     const fetchStocks = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:7651/stock_prediction_list/"
+          "http://localhost:80/predictions/stock_prediction_list/"
         );
         const data = response.data;
         setStocks(data);

@@ -157,6 +157,33 @@ services:
     networks:
       - tradewave-network
 
+  tradewave_wa_proxy:
+    container_name: tradewave_wa_proxy
+    build:
+      context: ./tradewave_wa_rp
+      dockerfile: Dockerfile
+    ports:
+      - 90:90
+    depends_on:
+      - tradewave-ldap
+    networks:
+      - tradewave-network
+
+  tradewave_wa:
+    container_name: tradewave_wa
+    build:
+      context: ./tradewave_wa
+      dockerfile: Dockerfile
+    ports:
+      - 3000:3000
+    depends_on:
+      - tradewave-ldap
+    networks:
+      - tradewave-network
+    command: >
+      sh -c "set HTTPS=true  &&
+             yarn start"
+
 volumes:
   db-data:
   mongodata:

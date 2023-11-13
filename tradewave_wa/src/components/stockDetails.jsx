@@ -26,7 +26,7 @@ function StockDetails() {
 
       try {
         let response = await axios.get(
-          `http://localhost:7651/stock_info/?name=${data}`
+          `http://localhost:80/predictions/stock_info/?name=${data}`
         );
         response = response.data[0];
         setComic(response);
