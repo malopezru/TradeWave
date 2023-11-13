@@ -81,37 +81,38 @@ function StockDetails() {
   }
   const data = localStorage.getItem('data');
   return (
-    <div className="chart-container">
-  <Header title="Detalles del cómic" />
-  
-  <h2>{data}</h2>
-  <LineChart width={500} height={300} data={chartData}>
-  <Line type="monotone" dataKey="historic" stroke="#3f51b5" fillOpacity={1} fill="url(#colorHistoric)" dot={false} activeDot={false} />
-  <Line type="monotone" dataKey="predicted" stroke="#f50057" fillOpacity={1} fill="url(#colorPredicted)" dot={false} activeDot={false} />
-  <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
-  <XAxis dataKey="name" />
-  <YAxis />
-  <Tooltip />
-  <Brush />
-  <defs>
-    <linearGradient id="colorHistoric" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="5%" stopColor="#3f51b5" stopOpacity={0.8}/>
-      <stop offset="95%" stopColor="#3f51b5" stopOpacity={0}/>
-    </linearGradient>
-    <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
-      <stop offset="5%" stopColor="#f50057" stopOpacity={0.8}/>
-      <stop offset="95%" stopColor="#f50057" stopOpacity={0}/>
-    </linearGradient>
-  </defs>
-</LineChart>
-  <BuyOrSell />
-  <Modal
-    isOpen={modalIsOpen}
-    onRequestClose={() => setModalIsOpen(false)}
-    className="custom-modal"
-  >
-    <div>{modalMessage}</div>
-  </Modal>
+    <div>
+      <Header title="Detalles del cómic" /> 
+      <div className="chart-container">
+        <h2>{data}</h2>
+        <LineChart width={500} height={300} data={chartData}>
+        <Line type="monotone" dataKey="historic" stroke="#3f51b5" fillOpacity={1} fill="url(#colorHistoric)" dot={false} activeDot={false} />
+        <Line type="monotone" dataKey="predicted" stroke="#f50057" fillOpacity={1} fill="url(#colorPredicted)" dot={false} activeDot={false} />
+        <CartesianGrid stroke="#ccc" strokeDasharray="5 5" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Brush />
+        <defs>
+          <linearGradient id="colorHistoric" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#3f51b5" stopOpacity={0.8}/>
+            <stop offset="95%" stopColor="#3f51b5" stopOpacity={0}/>
+          </linearGradient>
+          <linearGradient id="colorPredicted" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="5%" stopColor="#f50057" stopOpacity={0.8}/>
+            <stop offset="95%" stopColor="#f50057" stopOpacity={0}/>
+          </linearGradient>
+        </defs>
+      </LineChart>
+        <BuyOrSell />
+        <Modal
+          isOpen={modalIsOpen}
+          onRequestClose={() => setModalIsOpen(false)}
+          className="custom-modal"
+        >
+          <div>{modalMessage}</div>
+        </Modal>
+    </div>
 </div>
   );
 }
