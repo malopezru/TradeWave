@@ -53,7 +53,7 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
             userId: userData.id,
             stock,
             createdAt: new Date(),
-            currentValue: stockValue.stock_price,
+            currentValue: stockValue.actual_price,
             action
         });
         const stocks = await newAction.save();
