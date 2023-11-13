@@ -24,9 +24,6 @@ async function start() {
         extended: true
       }));
     app.use(bodyParser.json())
-    app.use(cors({
-        origin: '*'
-    }))
 //---------------------- USERS ENDPOINTS ---------------------------------
     app.get('/users/:reqType', async (req, res) => {
         let { reqType } = req.params;
@@ -86,6 +83,10 @@ async function start() {
         res.status(200).jsonp(response);
     })
 //-------------------------------------------------------------------------------
+    app.use(cors({
+        origin: '*'
+    }))
+    
     app.listen(PORT, () => {
         console.log(`Server running at port ${PORT}`);
     })
