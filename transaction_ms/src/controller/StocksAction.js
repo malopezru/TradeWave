@@ -38,10 +38,18 @@ Stock.prototype.buyOrSellStock = async function (req, res) {
     const { authorization } = req.headers;
     try {
         const userData = await getUser(authorization);
+        if (action == 'sell') {
+            await StocksActionModel.deleteOne({ stock, userId: userData.id, action: 'buy' })
+        };
         const actions = await StocksActionModel.find({});
         const stockValue = await getStockValue(stock);
+        console.log(actions)
+        let id = 0;
+        if (actions.length != 0) {
+            id = actions[actions.length-1]._id + 1;
+        }
         const newAction = new StocksActionModel({
-            _id: actions.length + 1,
+            _id: id,
             userId: userData.id,
             stock,
             createdAt: new Date(),
