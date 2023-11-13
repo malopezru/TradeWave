@@ -24,7 +24,7 @@ Stock.prototype.getStocksActionsByUser = async function (req, res) {
     const { authorization } = req.headers;
     try {
         const user = await getUser(authorization);
-        const stocksByUser = await StocksActionModel.find({ userId: user.id });
+        const stocksByUser = await StocksActionModel.find({ userId: user.id, action: 'buy' });
         console.log(stocksByUser)
         res.status(200).jsonp(stocksByUser);
     } catch (error) {
