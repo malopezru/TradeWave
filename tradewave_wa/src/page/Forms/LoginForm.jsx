@@ -23,7 +23,7 @@ function Login() {
           password: password
         }
       );
-
+      console.log(response);
       if (response.request.status === 200) {
         // guardar el token en el local storage
         localStorage.setItem('token', response.data.token);
@@ -32,18 +32,19 @@ function Login() {
         navigate('/AppMain');
       }
     } catch (error) {
-      console.log(error.response.status);
-      if (error.response.status === 401) {
+
+      console.error(error);
+      if (error.status === 401) {
         setModalMessage('Credenciales incorrectas');
       }
-      else if (error.response.status === 404) {
+      else if (error.status === 404) {
         setModalMessage('Usuario no encontrado');
       }
       else{
         setModalMessage('Error del servidor');
       }
 
-      setModalIsOpen(true);
+      //setModalIsOpen(true);
     }
   };
 

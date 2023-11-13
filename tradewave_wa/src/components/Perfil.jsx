@@ -13,27 +13,27 @@ import axios from 'axios';
     const navigate = useNavigate();
     useState(() => {
 
-    const fetchUser = async () => {
-        try {
-            const response = await axios.post(
+        const fetchUser = async (e) => {
+            try {
+              const response = await axios.post(
                 "http://localhost:80/users/getMe",
                 {},
                 {
                   headers: {
                     'Authorization': localStorage.getItem('token')
+                    
                   },
                 }
               );
-            const data = response.data;
-            setuser(data);
-        } catch (error) {
-            console.error(error);
-            // Error handling
-        }
-    };
-    fetchUser();
-    }
-    , []);
+              const data = response.data;
+              setuser(data);
+            } catch (error) {
+              console.error(error);
+              // Error handling
+            }
+          };
+          fetchUser();
+        }, []);
     const handleLogout = async () => {
         localStorage.removeItem('token');
         navigate('/login');
