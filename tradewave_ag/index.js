@@ -56,6 +56,15 @@ async function start() {
         res.status(200).jsonp(response);
     })
 
+    app.delete('/users/:reqType', async (req, res) => {
+        const { reqType } = req.params;
+        const body = req.body;
+        const { authorization } = req.headers;
+        console.log("hola")
+        const response = await userRequests(reqType, 'DELETE', body, { authorization });
+        res.status(200).jsonp(response);
+    })
+
 //---------------------- TRANSACTIONS ENDPOINTS ---------------------------------
 app.get('/transactions/:reqType', async (req, res) => {
     let { reqType } = req.params;
