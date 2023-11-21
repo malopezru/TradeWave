@@ -24,9 +24,10 @@ SECRET_KEY = 'django-insecure-3x47g*_xl8v)+lrtldk)g=rxrlow-=wm%l)37j0g91^7b2f60m
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+# SECURITY WARNING: don't run with debug turned on in production!
+DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -39,13 +40,11 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'stock_prediction_RPA',
     'rest_framework',
+    'corsheaders',  # Add this line
 ]
 
-
-
-
-
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',  # Add this line
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -54,6 +53,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ORIGIN_ALLOW_ALL = True  # Allow all origins
 
 ROOT_URLCONF = 'stock_prediction_back.urls'
 
@@ -87,9 +88,9 @@ DATABASES = {
         'CLIENT': {
             'host': 'mongodb://mongo-db:27017',
         },
-
     },
 }
+
 
 from django.db import connections
 
@@ -152,3 +153,8 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+CRONJOBS = [
+('0 */5 * * *', 'stock_prediction_RPA.cron.fillStockInfo')
+]

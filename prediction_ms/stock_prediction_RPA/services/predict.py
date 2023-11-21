@@ -17,7 +17,7 @@ class StockPredictor:
         model.add(Dense(units=25))
         model.add(Dense(units=1))
         model.compile(optimizer='adam', loss='mean_squared_error')
-        model.fit(x_train, y_train, batch_size=1, epochs=1)
+        model.fit(x_train, y_train, batch_size=1, epochs=5 )
         self.model=model
  
     def split_data(self,scaled_data):

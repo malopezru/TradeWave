@@ -2,6 +2,7 @@ const { ApolloServer } = require("apollo-server-express");
 const { userTypeDefs } = require('./src/typeDefs');
 const userRequests = require('./src/requests/userRequests');
 const transactionRequests = require('./src/requests/transactionRequests');
+const predictionRequests = require('./src/requests/predictionRequest');
 const bodyParser = require('body-parser')
 const express = require('express');
 const cors = require('cors')
@@ -82,6 +83,21 @@ async function start() {
         const response = await transactionRequests(reqType, 'POST', body, { authorization });
         res.status(200).jsonp(response);
     })
+//---------------------- PREDITIONS ENDPOINTS -----------------------------------
+    app.get('/predictions/:reqType', async (req, res) => {
+        let { reqType } = req.params;
+        const {name} = req.query;
+        const headers = req.headers;
+        if(reqType == 'stock_info'){
+            reqType = `${reqType}/?name=${name}`
+        }
+        else{
+            reqType = `${reqType}/`
+        }
+
+        const response = await predictionRequests(reqType, 'GET', headers);
+        res.status(200).jsonp(response);
+    })
 //-------------------------------------------------------------------------------
     app.use(cors({
         origin: '*'
@@ -91,6 +107,7 @@ async function start() {
         console.log(`Server running at port ${PORT}`);
     })
 }
+//-------------------------------------------------------------------------------
 
 start();
 module.exports = app;

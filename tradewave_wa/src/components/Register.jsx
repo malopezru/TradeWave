@@ -1,27 +1,33 @@
 import React, { useState } from 'react';
 import axios from 'axios';// importa useHistory desde React Router
-import './styles.css';
-import Modal from 'react-modal';
+import './styles.css'
 import Header from '../page/header/index.jsx';
+import Footer from '../page/Footer';
 import { useNavigate } from "react-router-dom";
+import CustomModal from './Modal';
 
 function Register() {
   const [nombre, setNombre] = useState('');
   const [email, setEmail] = useState('');
   const [contrasena, setContrasena] = useState('');
+  const [contrasena2, setContrasena2] = useState('');
   const [modalMessage, setModalMessage] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const navigate = useNavigate();
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
+    if(contrasena!==contrasena2){
+      setModalMessage('Las contraseñas no coinciden');
+      setModalIsOpen(true);
+      return;
+    }
     try {
       const response = await axios.post(
-        `${"/api/user/register"}`,
+        `${"http://localhost:80/users/register"}`,
         {
-          nombre,
-          correo_electronico: email,
-          contrasena,
+          name: nombre,
+          password: contrasena,
+          email: email,
         }
       );
 
@@ -68,6 +74,10 @@ function Register() {
               <i className="fas fa-lock"></i>
               <input type="password" placeholder="Contraseña" value={contrasena} onChange={(e) => setContrasena(e.target.value)} required />
             </div>
+            <div className="row">
+              <i className="fas fa-lock"></i>
+              <input type="password" placeholder="Contraseña" value={contrasena2} onChange={(e) => setContrasena2(e.target.value)} required />
+            </div>
             <div className="row button">
               <input type="submit" value="Regístrate" />
             </div>
@@ -75,12 +85,8 @@ function Register() {
           </form>
         </div>
       </div>
-      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} className="custom-modal"> {/* Agrega la clase "custom-modal" al modal */}
-        <div>{modalMessage}</div>
-        <button onClick={() => setModalIsOpen(false)}>Cerrar</button>
-      </Modal>
-
-
+      <CustomModal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} message={modalMessage} /> 
+      <Footer/>
     </div>
   );
 }

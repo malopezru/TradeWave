@@ -1,5 +1,7 @@
 //header component
 import React from 'react';
+//import logo
+import logo from '../../TradeWaveLogo.png';
 
 import '../../components/styles.css';
 import { Link } from 'react-router-dom';
@@ -7,10 +9,9 @@ import { Link } from 'react-router-dom';
 function Header(props) {
     const token = localStorage.getItem('token');
     let navLinks = [];
-    let bool=(token==null);
+    let bool=(token!=null);
     if(bool){
         navLinks = [
-            { to: '/', text: 'Inicio' },
             { to: '/AppMain', text: 'Lista de acciones' },
             { to: '/Actions', text: 'Acciones compradas' },
             { to: '/perfil', text: 'Perfil' }
@@ -18,19 +19,24 @@ function Header(props) {
     }
     else{
         navLinks = [
-            { to: '/', text: 'Inicio' },
+            { to: '/login', text: 'Inicio' },
             { to: '/Actions', text: 'Lista de acciones' }
         ];
     }
     return (
-        <header>
+      <header>
+        <div className="logo-container">
           <img
-            src="https://img.freepik.com/foto-gratis/rastro-pulso-que-brilla-intensamente-monitor-computadora-generado-ai_24640-89894.jpg"
-            alt="Comic Webpage Logo"
-            style={{ maxWidth: "60%", height: "auto" }}
+            src={logo}
+            alt="TradeWave Logo"
+            style={{ maxWidth: "7%", height: "auto" }}
           />
-          <h1>{props.title}</h1>
-          <nav>
+          <div className="app-name-container">
+            <h1 className="page-name">TradeWave</h1>
+          </div>
+        </div>
+        <nav >
+          <div className="button-container">
             <ul>
               {navLinks.map((link) => (
                 <li key={link.to}>
@@ -40,8 +46,9 @@ function Header(props) {
                 </li>
               ))}
             </ul>
-          </nav>
-        </header>
+          </div>
+        </nav>
+      </header>
       );
 }
 

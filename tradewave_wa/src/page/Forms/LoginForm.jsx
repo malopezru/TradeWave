@@ -2,49 +2,51 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../../components/styles.css'; // Importa tu archivo CSS personalizado aquí
 import axios from 'axios';
-import Modal from 'react-modal';
+import CustomModal from '../../components/Modal'; // Importa el componente CustomModal
 import { useNavigate } from "react-router-dom";
 
 function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-    const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [modalMessage, setModalMessage] = useState('');
-    const navigate = useNavigate();
-    const handleLogin = async (e) => {
-      e.preventDefault();
-      
-      try {
-        const response = await axios.post(
-          `${"/api/user/login"}`,
-          {
-            credenciales: email,
-            contrasena: password
-          }
-        );
-  
-        if (response.status === 200) {
-          // guardar el token en el local storage
-          localStorage.setItem('token', response.data.data[0].token);
-          //get token from local storage
-          // redireccionar a la ruta /appMain
-          navigate('/AppMain');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [modalMessage, setModalMessage] = useState('');
+  const navigate = useNavigate();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    try {
+      const response = await axios.post(
+        `${"http://localhost:80/users/login"}`,
+        {
+          email: email,
+          password: password
         }
-      } catch (error) {
-        console.log(error.response.status);
-        if (error.response.status === 401) {
-          setModalMessage('Credenciales incorrectas');
-        }
-        else if (error.response.status === 404) {
-          setModalMessage('Usuario no encontrado');
-        }
-        else{
-          setModalMessage('Error del servidor');
-        }
-  
-        setModalIsOpen(true);
+      );
+      console.log(response);
+      if (response.request.status === 200) {
+        // guardar el token en el local storage
+        localStorage.setItem('token', response.data.token);
+        //get token from local storage
+        // redireccionar a la ruta /appMain
+        navigate('/AppMain');
       }
-    };
+    } catch (error) {
+
+      console.error(error);
+      if (error.status === 401) {
+        setModalMessage('Credenciales incorrectas');
+      }
+      else if (error.status === 404) {
+        setModalMessage('Usuario no encontrado');
+      }
+      else{
+        setModalMessage('Error del servidor');
+      }
+
+      //setModalIsOpen(true);
+    }
+  };
 
   return (
     <div>
@@ -69,14 +71,11 @@ function Login() {
         </div>
       </div>
 
-      <footer>
-        <p>&copy; 2023 TradeWave. Todos los derechos reservados.</p>
-      </footer>
-
-      <Modal isOpen={modalIsOpen} onRequestClose={() => setModalIsOpen(false)} className="custom-modal"> {/* Agrega la clase "custom-modal" al modal */}
-        <div>{modalMessage}</div>
-        <button onClick={() => setModalIsOpen(false)}>Cerrar</button>
-      </Modal>
+      <CustomModal
+        isOpen={modalIsOpen}
+        onRequestClose={() => setModalIsOpen(false)}
+        message={modalMessage}
+      />
     </div>
   );
 }

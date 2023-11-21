@@ -9,8 +9,13 @@ const transactionsHost = {
     port: '5000',
     entryPoint: 'transactions'
 } 
+const predictionsHost = {
+    url: 'prediction-app',
+    port: '7651',
+}
 
 module.exports = {
     usersHost,
-    transactionsHost
+    transactionsHost,
+    predictionsHost
 }
