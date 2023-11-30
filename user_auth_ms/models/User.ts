@@ -1,14 +1,10 @@
-import { DataTypes } from "sequelize"
-import { db } from "../db/connection"
+import mongoose, { Schema } from "mongoose"
 
-export const User = db.define('user', {
-    name: {
-        type: DataTypes.STRING
-    },
-    email: {
-        type: DataTypes.STRING
-    },
-    password: {
-        type: DataTypes.STRING
-    }
-})
+var UserModel = new Schema({
+    _id: { type: Number, required: true },
+    name: { type: String },
+    email: { type: String },
+    password: { type: String }
+});
+
+export const User = mongoose.model('users', UserModel);

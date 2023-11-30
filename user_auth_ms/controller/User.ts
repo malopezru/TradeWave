@@ -4,13 +4,13 @@ import { Request, Response } from "express"
 import { User } from "../models/User"
 
 export const getUsers = async ( req: Request, res: Response ) => {
-    const users = await User.findAll()
+    const users = await User.find({})
     res.json(users)
 }
 
 export const getUserById = async ( req: Request, res: Response ) => {
     const { id } = req.params
-    const user = await User.findByPk(id)
+    const user = await User.findById(id)
     if(!user) res.status(404).json('User does not exist')
     res.json(user)
 }
@@ -26,7 +26,7 @@ export const postUser = async ( req: Request, res: Response ) => {
     })
     if (user) return res.status(400).jsonp('User already exists')
     
-    const newUser = User.build({
+    const newUser = new User({
         ...body,
         password: password
     })
@@ -69,10 +69,10 @@ export const putUser = async ( req: Request, res: Response ) => {
         }
     })
     if (user) return res.status(400).jsonp('User already exists')
-    user = await User.findByPk(id)
+    user = await User.findById(id)
     if (!user) return res.status(400).jsonp('User id does not exist')
 
-    await user.update(body) 
+    await User.updateOne({ _id: id }, { body })
 
     res.json(user)
 }
@@ -86,9 +86,9 @@ export const deleteUser = async ( req: Request, res: Response ) => {
         res.status(400).jsonp(`User and token don't coincide`)
     }
 
-    const userToDelete = await User.findByPk(id)
+    const userToDelete = await User.findById(id)
     if (!userToDelete) return res.status(400).jsonp('User id does not exist')
-    await userToDelete.destroy()
+    await User.deleteOne({ _id: id })
 
     res.json(userToDelete)
 }
